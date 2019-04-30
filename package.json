@@ -9,7 +9,8 @@
     "server:watch": "./node_modules/.bin/tsc -w & ./node_modules/.bin/nodemon -w js/server/server.js",
     "server:build": "./node_modules/.bin/tsc",
     "start:dev": "npm run build-server & npm run webpack",
-    "test": "DATABASE_URL=postgres://localhost/graceshopper_test ./node_modules/.bin/jest --watch"
+    "test:watch": "./node_modules/.bin/tsc && DATABASE_URL=postgres://localhost/graceshopper_test ./node_modules/.bin/jest --watch",
+    "test": "./node_modules/.bin/tsc && DATABASE_URL=postgres://localhost/graceshopper_test ./node_modules/.bin/jest"
   },
   "repository": {
     "type": "git",

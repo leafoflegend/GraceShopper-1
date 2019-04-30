@@ -1,34 +1,28 @@
-import {
-  Sequelize,
-  Table,
-  Column,
-  Model,
-  HasMany,
-  BelongsTo,
-  DataType
-} from "sequelize-typescript";
+import { Sequelize } from "sequelize-typescript";
 
-const conn = new Sequelize(typeof process.env.DATABASE_URL === 'string' ? process.env.DATABASE_URL : '');
+// @ts-ignore
+const conn = new Sequelize({
+  database: process.env.DATABASE_NAME || 'graceshopper_test',
+  dialect: 'postgres',
+  logging: process.env.DATABASE_LOGGING || false,
+  modelPaths: [`${__dirname}/models`],
+});
 
-@Table({
-  timestamps: true,
-  tableName: "user"
-})
-class User extends Model<User> {
-  @Column({
-    allowNull: false,
-    defaultValue: '',
+type Sync = () => Promise<Sequelize>;
+const sync: Sync = () => {
+  return new Promise((res, rej) => {
+    conn
+      .sync()
+      .then(() => {
+        res(conn);
+      })
+      .catch((e: Error) => {
+        rej(e);
+      })
   })
-  name!: string;
-
-  @Column({
-    allowNull: false,
-    defaultValue: 0,
-  })
-  age!: number;
-}
+};
 
 export {
-  User,
   conn,
-}
+  sync,
+};
